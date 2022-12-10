@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Body, Controller, Post } from '@nestjs/common';
+import { CreateTeamMemberBody } from './dtos/create-tem-member-body';
+import { RocketMembersRepository } from './repositories/rocket-members-repository';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private rocketMembersRepository: RocketMembersRepository) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post()
+  async getHello(@Body() body: CreateTeamMemberBody) {
+    const { name, function: memberFunction } = body;
+
+    await this.rocketMembersRepository.create(name, memberFunction);
   }
 }
